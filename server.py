@@ -8,36 +8,37 @@ users = set()
 USERS = {}
 
 def user_event():
-    return json.dumps({"type": "users", "count": len(users)})
+    return json.dumps({"type": "users", "count": len(USERS)})
 
 # def user_message():
 #     return json.dumps({"type":"message", "message":})
 
 
 async def reg_users(websocket):
-    users.add(websocket)
+
     await send_count_users()
     print(websocket)
 
 async def send_count_users():
-    if users:
+    if USERS:
         message = user_event()
-        await asyncio.wait([user.send(message) for user in users])
+        await asyncio.wait([user.send(message) for user in USERS])
 
 
 async def del_users(websocket):
-    users.remove(websocket)
+    del USERS[websocket]
+    # users.remove(websocket)
     await send_count_users()
 
 async def send_to_users(message):
-    if users:
+    if USERS:
         message = json.dumps({"type": "message", "value": message})
-        await asyncio.wait([user.send(message) for user in users])
+        await asyncio.wait([user.send(message) for user in USERS])
 
 
 
 async def server(websocket,path):
-    await reg_users(websocket)
+    # await reg_users(websocket)
 
 
     try:
@@ -45,7 +46,7 @@ async def server(websocket,path):
 
     finally:
         await del_users(websocket)
-        print(users)
+        print(USERS)
 
 
 async def data(websocket):
@@ -53,15 +54,18 @@ async def data(websocket):
         pem = json.loads(message)
         if pem['action'] == 'reg':
             USERS.update({websocket:pem['values']})
+            await reg_users(websocket)
             print(USERS)
-        else:
-            pass
+        elif pem['action'] == 'messages':
+            message = pem['values']
+            print(message)
+            await send_to_users(message)
 
 
-        print(pem)
 
-        # print(message)
-        await send_to_users(message)
+
+
+        # await send_to_users(message)
 
 
 start_server = websockets.serve(server,'192.168.0.160',5678)

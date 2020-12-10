@@ -38,7 +38,9 @@ socket.onopen = function(){
             if(this.value.trim() === ""){
                 return false;
             }
-            socket.send(this.value.trim());
+            var mes = this.value.trim();
+            console.log(mes)
+            socket.send(JSON.stringify({action: 'messages', values: mes}));
             this.value = "";
         }
 
