@@ -5,6 +5,7 @@ import json
 STATE = {'value':0}
 
 users = set()
+USERS = {}
 
 def user_event():
     return json.dumps({"type": "users", "count": len(users)})
@@ -41,6 +42,7 @@ async def server(websocket,path):
 
     try:
         await data(websocket)
+
     finally:
         await del_users(websocket)
         print(users)
@@ -48,7 +50,17 @@ async def server(websocket,path):
 
 async def data(websocket):
     async for message in websocket:
+        pem = json.loads(message)
+        if pem['action'] == 'reg':
+            USERS.update({websocket:pem['values']})
+            print(USERS)
+        else:
+            pass
 
+
+        print(pem)
+
+        # print(message)
         await send_to_users(message)
 
 

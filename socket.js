@@ -3,18 +3,37 @@ var message = document.querySelector('.message');
 var socket = new WebSocket("ws://192.168.0.160:5678");
 var btn = document.querySelector(".join");
 var user_reg = document.querySelector('.reg');
+var text_area = document.querySelector('textarea')
+
+text_area.style.visibility = 'hidden';
 // document.getElementById('join').onclick = function() {
 //     user_reg.style.visibility = 'hidden';
 // };
-function hideregonClick() {
-    user_reg.style.visibility = 'hidden';
-};
+// function hideregonClick() {
+//     user_reg.style.visibility = 'hidden';
+// };
 
+user_reg.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const userField = document.querySelector('.add_user')
+    if (userField.value.trim()) {
+        // socket.send(userField.value.trim());
+        var username = userField.value.trim();
+        socket.send(JSON.stringify({action: 'reg', values: username}));
+        user_reg.style.visibility = 'hidden';
+        text_area.style.visibility = 'visible';
+    } else {
+        return
+    }
+})
 
 
 socket.onopen = function(){
 
-    document.querySelector("textarea").addEventListener('keyup', function(e){
+    // document.querySelector('.add_user')
+    // socket.send(this.value.trim());
+
+    text_area.addEventListener('keyup', function(e){
         if(e.keyCode === 13){
             if(this.value.trim() === ""){
                 return false;
@@ -52,4 +71,4 @@ socket.onmessage = function() {
     }
 };
 
-btn.addEventListener('click',hideregonClick);
+// btn.addEventListener('click',hideregonClick);
