@@ -13,6 +13,7 @@
     position: absolute;
     top: 270px;
     visibility: visible;
+    padding: 5px;
 
 
     width: 100px;
@@ -43,12 +44,12 @@
     width: 500px;
     height: 300px;
     background: #8a7d7d;
-    overflow: auto;
+    overflow-y: auto;
     scroll-behavior: unset;
 }
 .message{
     padding: 5px;
-
+    overflow-y: auto;
 }
 
 .text_area{
@@ -72,6 +73,6 @@
 .reg button{
     position: absolute;
     right: -50px;
-    top: 0;
+    top: 5px;
 
 }

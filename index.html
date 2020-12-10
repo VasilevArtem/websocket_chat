@@ -12,20 +12,21 @@
     <div class='all_chat'>
         <h3>Общий чат</h3>
         <div class='user_list'>
-            <div class='user_block'>conected
+            <div class='user_block'>conected</div>
                 <div class='reg'>
                     <input type="text" class='add_user' placeholder='Enter you name'>
                     <button id='join' class='join'>join</button>
+
                 </div>
             </div>
+            <div class="message_block">
+                <div class="message"></div>
+            </div>
+            <div class='text_area'><textarea class='chat' placeholder="Для отправки нажмите Enter"></textarea></div>
+
+
         </div>
-        <div class="message_block">
-            <div class="message"></div>
-        </div>
-        <div class='text_area'><textarea class='chat' placeholder="Для отправки нажмите Enter"></textarea></div>
 
-
-    </div>
-
-    <script src='socket.js'></script>
+        <script src='socket.js'></script>
+    </body>
     </html>
