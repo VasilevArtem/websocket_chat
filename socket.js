@@ -55,7 +55,7 @@ socket.onmessage = function() {
 
     switch (data.type) {
         case 'users':
-        users.textContent = (data.count.toString());
+        users.textContent = (data.u_name.toString());
         console.log(data);
         break;
         case 'message':

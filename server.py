@@ -11,7 +11,7 @@ USERS = {}
 
 def user_event():
 
-    return json.dumps({"type": "users", "count": list(USERS.values())})
+    return json.dumps({"type": "users", "u_name": list(USERS.values())})
 
 # def user_message():
 #     return json.dumps({"type":"message", "message":})
