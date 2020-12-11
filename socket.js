@@ -18,8 +18,8 @@ user_reg.addEventListener('submit', (e) => {
     const userField = document.querySelector('.add_user')
     if (userField.value.trim()) {
         // socket.send(userField.value.trim());
-        var username = userField.value.trim();
-        socket.send(JSON.stringify({action: 'reg', values: username}));
+
+        socket.send(JSON.stringify({action: 'reg', values: userField.value.trim()}));
         user_reg.style.visibility = 'hidden';
         text_area.style.visibility = 'visible';
     } else {
@@ -30,17 +30,14 @@ user_reg.addEventListener('submit', (e) => {
 
 socket.onopen = function(){
 
-    // document.querySelector('.add_user')
-    // socket.send(this.value.trim());
 
     text_area.addEventListener('keyup', function(e){
         if(e.keyCode === 13){
             if(this.value.trim() === ""){
                 return false;
             }
-            var mes = this.value.trim();
-            console.log(mes)
-            socket.send(JSON.stringify({action: 'messages', values: mes}));
+
+            socket.send(JSON.stringify({action: 'messages', values: this.value.trim()}));
             this.value = "";
         }
 
@@ -58,14 +55,14 @@ socket.onmessage = function() {
 
     switch (data.type) {
         case 'users':
-        users.textContent = (data.count.toString() + " user" +
-        (data.count ==1 ? "" : 's'));
+        users.textContent = (data.count.toString());
         console.log(data);
         break;
         case 'message':
         p = document.createElement("p");
-        p.innerHTML = data.value.toString();
+        p.innerHTML = data.user.toString() + ': ' + data.value.toString();
         document.querySelector(".message").appendChild(p);
+        console.log(data);
 
         break;
         default:

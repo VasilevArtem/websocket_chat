@@ -7,8 +7,11 @@ STATE = {'value':0}
 users = set()
 USERS = {}
 
+
+
 def user_event():
-    return json.dumps({"type": "users", "count": len(USERS)})
+
+    return json.dumps({"type": "users", "count": list(USERS.values())})
 
 # def user_message():
 #     return json.dumps({"type":"message", "message":})
@@ -30,9 +33,9 @@ async def del_users(websocket):
     # users.remove(websocket)
     await send_count_users()
 
-async def send_to_users(message):
+async def send_to_users(message,websocket):
     if USERS:
-        message = json.dumps({"type": "message", "value": message})
+        message = json.dumps({"type": "message","user": USERS[websocket] ,"value": message})
         await asyncio.wait([user.send(message) for user in USERS])
 
 
@@ -59,7 +62,7 @@ async def data(websocket):
         elif pem['action'] == 'messages':
             message = pem['values']
             print(message)
-            await send_to_users(message)
+            await send_to_users(message,websocket)
 
 
 
