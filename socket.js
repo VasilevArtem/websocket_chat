@@ -3,7 +3,8 @@ var message = document.querySelector('.message');
 var socket = new WebSocket("ws://192.168.0.160:5678");
 var btn = document.querySelector(".join");
 var user_reg = document.querySelector('.reg');
-var text_area = document.querySelector('textarea')
+var text_area = document.querySelector('textarea');
+
 
 text_area.style.visibility = 'hidden';
 // document.getElementById('join').onclick = function() {
@@ -55,13 +56,17 @@ socket.onmessage = function() {
 
     switch (data.type) {
         case 'users':
-        users.textContent = (data.u_name.toString());
+        p = document.createElement("p");
+        p.innerHTML = (data.u_name.toString());
+        document.querySelector(".user_block").appendChild(p);
+        // users.textContent = (data.u_name.toString());
         console.log(data);
         break;
         case 'message':
         p = document.createElement("p");
         p.innerHTML = data.user.toString() + ': ' + data.value.toString();
         document.querySelector(".message").appendChild(p);
+        message.scrollTop += 100;
         console.log(data);
 
         break;
@@ -69,5 +74,3 @@ socket.onmessage = function() {
         console.error('unsuported data', data);
     }
 };
-
-// btn.addEventListener('click',hideregonClick);

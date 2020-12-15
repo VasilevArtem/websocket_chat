@@ -44,12 +44,13 @@
     width: 500px;
     height: 300px;
     background: #8a7d7d;
-    overflow-y: auto;
-    scroll-behavior: unset;
+    
+
 }
 .message{
     padding: 5px;
-    overflow-y: auto;
+    height: 100%;
+    overflow: auto;
 }
 
 .text_area{
