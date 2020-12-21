@@ -5,21 +5,13 @@ var btn = document.querySelector(".join");
 var user_reg = document.querySelector('.reg');
 var text_area = document.querySelector('textarea');
 
-
 text_area.style.visibility = 'hidden';
-// document.getElementById('join').onclick = function() {
-//     user_reg.style.visibility = 'hidden';
-// };
-// function hideregonClick() {
-//     user_reg.style.visibility = 'hidden';
-// };
-
+// Registration user
+function regUser() {
 user_reg.addEventListener('submit', (e) => {
     e.preventDefault();
     const userField = document.querySelector('.add_user')
     if (userField.value.trim()) {
-        // socket.send(userField.value.trim());
-
         socket.send(JSON.stringify({action: 'reg', values: userField.value.trim()}));
         user_reg.style.visibility = 'hidden';
         text_area.style.visibility = 'visible';
@@ -27,6 +19,18 @@ user_reg.addEventListener('submit', (e) => {
         return
     }
 })
+}
+// Get user list
+function getUsers(){
+    socket.send(JSON.stringify({action: 'getuser'}))
+
+
+}
+
+
+
+regUser();
+
 
 
 socket.onopen = function(){
@@ -56,11 +60,28 @@ socket.onmessage = function() {
 
     switch (data.type) {
         case 'users':
+
         p = document.createElement("p");
-        p.innerHTML = (data.u_name.toString());
-        document.querySelector(".user_block").appendChild(p);
+        var arr = data.u_name;
+        console.log(arr)
+        if (users.hasChildNodes()){
+                users.removeChild(users.firstChild)
+
+        }
+        else {
+            arr.forEach(function(item, i, arr){
+                p = document.createElement("p");
+                p.innerHTML = (item.toString());
+                users.appendChild(p);
+
+            });
+        }
+
+
+        // p.innerHTML = (data.u_name.toString());
+        // document.querySelector(".user_block").appendChild(p);
         // users.textContent = (data.u_name.toString());
-        console.log(data);
+        console.log(data.u_name);
         break;
         case 'message':
         p = document.createElement("p");

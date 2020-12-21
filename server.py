@@ -17,10 +17,11 @@ def user_event():
 #     return json.dumps({"type":"message", "message":})
 
 
-async def reg_users(websocket):
+async def reg_users(websocket,pem):
 
-    await send_count_users()
-    print(websocket)
+    USERS.update({websocket:pem['values']})
+
+    print(USERS)
 
 async def send_count_users():
     if USERS:
@@ -30,7 +31,6 @@ async def send_count_users():
 
 async def del_users(websocket):
     del USERS[websocket]
-    # users.remove(websocket)
     await send_count_users()
 
 async def send_to_users(message,websocket):
@@ -56,9 +56,12 @@ async def data(websocket):
     async for message in websocket:
         pem = json.loads(message)
         if pem['action'] == 'reg':
-            USERS.update({websocket:pem['values']})
-            await reg_users(websocket)
-            print(USERS)
+            await reg_users(websocket,pem)
+            await send_count_users()
+            # print(USERS)
+        elif pem['action'] =='getuser':
+            await send_count_users()
+
         elif pem['action'] == 'messages':
             message = pem['values']
             print(message)
@@ -68,7 +71,7 @@ async def data(websocket):
 
 
 
-        # await send_to_users(message)
+
 
 
 start_server = websockets.serve(server,'192.168.0.160',5678)
